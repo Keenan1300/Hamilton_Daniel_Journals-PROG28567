@@ -1,7 +1,13 @@
 using UnityEngine;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine.Events;
 
 public class DrawVectors : MonoBehaviour
 {
+    Vector2 dVector;
+    Vector2 eVector;
+
     void Update()
     {
         // Create two Vector2 variables, "dVector" and "eVector"
