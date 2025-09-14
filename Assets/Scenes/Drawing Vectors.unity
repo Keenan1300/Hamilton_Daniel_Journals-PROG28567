@@ -1107,7 +1107,19 @@ MonoBehaviour:
   m_CharacterLimit: 0
   m_OnEndEdit:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1895976120}
+        m_TargetAssemblyTypeName: RowGeneration, Assembly-CSharp
+        m_MethodName: SendMessageUpwards
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_OnSubmit:
     m_PersistentCalls:
       m_Calls: []
@@ -1309,9 +1321,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ae87c51b43aa7f745b3a6eb595fa7088, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  InputField: {fileID: 1630511620}
+  Input: {fileID: 1630511620}
   Generate: 0
   inputvalue: 0
+  InputField: {fileID: 1630511620}
 --- !u!114 &1895976121
 MonoBehaviour:
   m_ObjectHideFlags: 0
