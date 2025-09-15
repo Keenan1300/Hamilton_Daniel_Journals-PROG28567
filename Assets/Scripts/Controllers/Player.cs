@@ -11,6 +11,8 @@ public class Player : MonoBehaviour
     void Update()
     {
 
+
+        //Instantiate bomb at inOffset
         if (Input.GetKey(KeyCode.B))
         {
 
