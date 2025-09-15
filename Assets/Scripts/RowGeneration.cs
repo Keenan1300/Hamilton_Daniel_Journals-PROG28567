@@ -48,6 +48,12 @@ public class RowGeneration : MonoBehaviour
             Debug.DrawLine(UpperLeftCorner, LowerLeftCorner);
         
         }
+
+
+         int Getsum (int a, int b) 
+        {
+            return a + b; 
+        }
     }
 
     public void DrawSquares()

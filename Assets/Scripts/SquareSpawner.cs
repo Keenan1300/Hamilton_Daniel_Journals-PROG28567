@@ -27,8 +27,12 @@ public class SquareSpawner : MonoBehaviour
         
 
         //Task1 a- Draw Squares on mouse down
-        Vector2 mouse = Input.mousePosition;
-        Vector2 mousescreenPosition = Camera.main.ScreenToWorldPoint(mouse);
+        Vector2 mousescreenPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        DrawBoxAtPosition(mousescreenPosition, Vector2.one, new Color(1f, 1f, 1f, 0.5f));
+
+
+
+        // my old code - OBSELETE**
 
 
         //Square cornerlocation
@@ -62,5 +66,27 @@ public class SquareSpawner : MonoBehaviour
         Debug.DrawLine(MouseLowerLeftCorner, MouseLowerRightCorner,SemiTransparentWhite);
         Debug.DrawLine(MouseLowerLeftCorner, MouseUpperLeftCorner,SemiTransparentWhite);
         Debug.DrawLine(MouseLowerRightCorner, MouseUpperRightCorner,SemiTransparentWhite);
+
+
+        
+    }
+
+
+
+
+    private void DrawBoxAtPosition(Vector2 position, Vector2 Size, Color color)
+    {
+        float halfwidth = Size.x / 2f;
+        float halfhieght = Size.y / 2f;
+
+        Vector2 topLeft = position + new Vector2(-halfwidth, halfhieght);
+        Vector2 topRight = topLeft + new Vector2(Size.x, 0);
+        Vector2 bottomright = topRight + new Vector2(0, -Size.y);
+        Vector2 bottomleft = bottomright + new Vector2(-Size.x, 0);
+
+        Debug.DrawLine(topLeft, topRight, color,0.5f);
+        Debug.DrawLine(topRight, bottomright, color, 0.5f);
+        Debug.DrawLine(bottomright, bottomleft, color, 0.5f);
+        Debug.DrawLine(bottomleft, topLeft, color, 0.5f);
     }
 }
