@@ -12,6 +12,9 @@ public class Player : MonoBehaviour
     public float BombSpacing;
     public int NumberOfBombs;
 
+    public float BombTrailSpacing;
+    public int NumberOfTrailBombs;
+
     // Update is called once per frame
     void Update()
     {
@@ -39,15 +42,15 @@ private void SpawnBombAtOffset(Vector3 inOffset)
             Instantiate(bombPrefab, SpawnPosition, Quaternion.identity);
         }
 
-public void SpawnBombTrail(float BombSpacing, int NumberOfBombs) 
+public void SpawnBombTrail(float BombTrailSpacing, int NumberOfTrailBombs) 
 {      
         
         float Spawnedbombs = 1;
 
-    for (int i = 0; i < NumberOfBombs; i++) 
+    for (int i = 0; i < NumberOfTrailBombs; i++) 
        {
             Vector2 PlayerPosition = transform.position;
-            Vector2 Bombposition = new Vector2(PlayerPosition.x, PlayerPosition.y + BombSpacing * Spawnedbombs);
+            Vector2 Bombposition = new Vector2(PlayerPosition.x, PlayerPosition.y + BombTrailSpacing * Spawnedbombs);
             Instantiate(bombPrefab, Bombposition, Quaternion.identity);
             Spawnedbombs += 1; 
      }
