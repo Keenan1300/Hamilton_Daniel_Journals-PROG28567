@@ -54,6 +54,13 @@ public class Player : MonoBehaviour
 
 
         }
+
+
+        //Asteroid Detector
+        if (Input.GetKey(KeyCode.Z))
+        {
+
+        }
     }
 
     //Spawn Bomb at offset
