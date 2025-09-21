@@ -44,6 +44,14 @@ public class Player : MonoBehaviour
 
 
         }
+
+        //Warp ship
+        if (Input.GetKeyDown(KeyCodeDown.W))
+        {
+            SpawnBombAtRandomCorner(inDistance);
+
+
+        }
     }
 
     //Spawn Bomb at offset
@@ -81,16 +89,17 @@ public class Player : MonoBehaviour
         Vector2 Playerlocation = transform.position;
 
         //Setup what "Corners" mean
-        Vector2 BottomL = new Vector2(Playerlocation.x - 1f, Playerlocation.y -1);
-        Vector2 BottomR = new Vector2(Playerlocation.x + 1f, Playerlocation.y - 1);
-        Vector2 TopR = new Vector2(Playerlocation.x + 1f, Playerlocation.y + 1);
-        Vector2 TopL = new Vector2(Playerlocation.x - 1f, Playerlocation.y + 1);
+        Vector2 BottomL = Playerlocation + new Vector2(-1,-1);
+        Vector2 BottomR = Playerlocation + new Vector2(1, -1);
+        Vector2 TopR = Playerlocation + new Vector2(1, 1);
+        Vector2 TopL = Playerlocation + new Vector2(-1, 1);
+
 
         //Roll for what corner is chosen
         if (RandomCorner == 1)
         {
             Vector2 NormalizeBottomL = BottomL.normalized;
-            Vector2 BombLocation = NormalizeBottomL * inDistance;
+            Vector2 BombLocation = NormalizeBottomL  * inDistance;
             Instantiate(bombPrefab, BombLocation, Quaternion.identity);
         }
 
