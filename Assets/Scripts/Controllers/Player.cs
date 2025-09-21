@@ -35,15 +35,16 @@ public class Player : MonoBehaviour
         }
     }
         
-
-private void SpawnBombAtOffset(Vector3 inOffset)
+    //Spawn Bomb at offset
+    private void SpawnBombAtOffset(Vector3 inOffset)
         {
             Vector3 SpawnPosition = transform.position + inOffset;
             Instantiate(bombPrefab, SpawnPosition, Quaternion.identity);
         }
 
-public void SpawnBombTrail(float BombTrailSpacing, int NumberOfTrailBombs) 
-{      
+    //Bomb trail task
+    public void SpawnBombTrail(float BombTrailSpacing, int NumberOfTrailBombs) 
+    {      
         
         float Spawnedbombs = 1;
 
@@ -54,6 +55,12 @@ public void SpawnBombTrail(float BombTrailSpacing, int NumberOfTrailBombs)
             Instantiate(bombPrefab, Bombposition, Quaternion.identity);
             Spawnedbombs += 1; 
      }
+
+
+
+    //Corner Bomb Exercise start
+
+
 }
     
 
