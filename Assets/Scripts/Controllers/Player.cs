@@ -17,6 +17,8 @@ public class Player : MonoBehaviour
 
     public float inDistance;
 
+    public float distanceratio;
+
     // Update is called once per frame
     void Update()
     {
@@ -46,9 +48,9 @@ public class Player : MonoBehaviour
         }
 
         //Warp ship
-        if (Input.GetKeyDown(KeyCodeDown.W))
+        if (Input.GetKeyDown(KeyCode.W))
         {
-            SpawnBombAtRandomCorner(inDistance);
+            Warptheship(enemyTransform, distanceratio);
 
 
         }
@@ -89,7 +91,7 @@ public class Player : MonoBehaviour
         Vector2 Playerlocation = transform.position;
 
         //Setup what "Corners" mean
-        Vector2 BottomL = Playerlocation + new Vector2(-1,-1);
+        Vector2 BottomL = Playerlocation + new Vector2(-1, -1);
         Vector2 BottomR = Playerlocation + new Vector2(1, -1);
         Vector2 TopR = Playerlocation + new Vector2(1, 1);
         Vector2 TopL = Playerlocation + new Vector2(-1, 1);
@@ -99,7 +101,7 @@ public class Player : MonoBehaviour
         if (RandomCorner == 1)
         {
             Vector2 NormalizeBottomL = BottomL.normalized;
-            Vector2 BombLocation = NormalizeBottomL  * inDistance;
+            Vector2 BombLocation = NormalizeBottomL * inDistance;
             Instantiate(bombPrefab, BombLocation, Quaternion.identity);
         }
 
@@ -121,6 +123,25 @@ public class Player : MonoBehaviour
             Vector2 BombLocation = NormalizeTopR * inDistance;
             Instantiate(bombPrefab, BombLocation, Quaternion.identity);
         }
+    }
+    
+    //Function to warp ship in target dirction
+    public void Warptheship(Transform enemytransform, float distanceratio) 
+    {
+        if(distanceratio > 1)
+        {
+          distanceratio = 1;
+        }
+
+        Vector2 playerposition = transform.position;
+        Vector2 Enemylocation = enemyTransform.position;
+
+        Vector2 interpolatedposition = Vector2.Lerp(playerposition, Enemylocation, distanceratio);
+
+        transform.position = interpolatedposition;
+
 
     }
+
+    
 }
