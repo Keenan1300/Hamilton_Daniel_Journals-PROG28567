@@ -19,6 +19,11 @@ public class Player : MonoBehaviour
 
     public float distanceratio;
 
+    //detector
+    public float Maxrange;
+
+
+
     // Update is called once per frame
     void Update()
     {
@@ -59,7 +64,7 @@ public class Player : MonoBehaviour
         //Asteroid Detector
         if (Input.GetKey(KeyCode.Z))
         {
-
+            Detector(Maxrange, asteroidTransforms);
         }
     }
 
@@ -131,13 +136,13 @@ public class Player : MonoBehaviour
             Instantiate(bombPrefab, BombLocation, Quaternion.identity);
         }
     }
-    
+
     //Function to warp ship in target dirction
-    public void Warptheship(Transform enemytransform, float distanceratio) 
+    public void Warptheship(Transform enemytransform, float distanceratio)
     {
-        if(distanceratio > 1)
+        if (distanceratio > 1)
         {
-          distanceratio = 1;
+            distanceratio = 1;
         }
 
         Vector2 playerposition = transform.position;
@@ -150,5 +155,31 @@ public class Player : MonoBehaviour
 
     }
 
-    
+    //detector functionality
+    public void Detector(float Maxrange, List<Transform> asteroidTransforms)
+    {
+        //setup player spot
+        Vector3 playerpos = transform.position;
+
+        //Find out where a particular asteroid is
+        for (int i = 0; i < 10; i++)
+        {
+            Transform Asteroid = asteroidTransforms[i];
+            Vector3 AsteroidPosition = Asteroid.position;
+
+            float PlayerToAsteroidDist = Vector3.Distance(AsteroidPosition, playerpos);
+            Vector3 Asteroidnorm = AsteroidPosition.normalized;
+            float AstroidMag = AsteroidPosition.magnitude;
+
+            print("the length of asteroid is" + AstroidMag);
+
+            if (AstroidMag < Maxrange)
+            {
+                Debug.DrawLine(playerpos, AsteroidPosition, Color.green);
+            }
+          
+        }
+
+    }
+
 }
