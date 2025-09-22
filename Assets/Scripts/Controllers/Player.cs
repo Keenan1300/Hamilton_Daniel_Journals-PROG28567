@@ -22,11 +22,27 @@ public class Player : MonoBehaviour
     //detector
     public float Maxrange;
 
+    //velocity
+    private Vector3 velocity;
+
+
+
+    public float MaxSpeed = 3f;
+    public float minspeed = 1f;
+    public float Accelerationtime = 0.5f;
+    
 
 
     // Update is called once per frame
     void Update()
     {
+       
+
+
+        //player move left
+        PlayerMovement();
+
+
         //Instantiate bomb at inOffset
         if (Input.GetKeyDown(KeyCode.T))
         {
@@ -179,6 +195,52 @@ public class Player : MonoBehaviour
             }
           
         }
+
+    }
+
+    public void PlayerMovement() 
+    {
+
+        //deceleration
+        velocity -= velocity * Time.deltaTime * 2;
+
+        float accelerationRate = MaxSpeed / Accelerationtime;
+        Vector2 playerpos = transform.position;
+
+        if (playerpos.x < 20 && playerpos.y < 20 && playerpos.x > -20 && playerpos.y > -20)
+        {
+
+            if (Input.GetKey(KeyCode.LeftArrow))
+            {
+                velocity += accelerationRate * Time.deltaTime * Vector3.left;
+            }
+
+            if (Input.GetKey(KeyCode.RightArrow))
+            {
+                velocity += accelerationRate * Time.deltaTime * Vector3.right;
+            }
+
+            if (Input.GetKey(KeyCode.UpArrow))
+            {
+                velocity += accelerationRate * Time.deltaTime * Vector3.up;
+            }
+            if (Input.GetKey(KeyCode.DownArrow))
+            {
+                velocity += accelerationRate * Time.deltaTime * Vector3.down;
+
+
+            }
+
+        }
+        else
+        {
+            playerpos = new Vector2(playerpos.x / 2, playerpos.y / 2);
+        }
+
+        //velocity wont exceed this value.
+        velocity = Vector3.ClampMagnitude(velocity,MaxSpeed);
+
+        transform.position += velocity * Time.deltaTime;
 
     }
 
