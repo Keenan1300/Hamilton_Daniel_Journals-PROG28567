@@ -10,20 +10,19 @@ public class Enemy : MonoBehaviour
     public List<Transform> asteroidTransforms;
     public int RandomAsteroid;
 
-    public float inDistance;
 
     //detector for asteroids
     public float Maxrange = 0.3f;
 
     //detector for player
-    public float PlayerMaxrange = 0.7f;
+    public float PlayerMaxrange = 50f;
 
     //velocity
     private Vector3 velocity;
 
 
     //movment variables
-    public float MaxSpeed = 8f;
+    public float MaxSpeed = 30f;
     public float Accelerationtime = 0.5f;
 
 
@@ -50,20 +49,20 @@ public class Enemy : MonoBehaviour
             {
                 {
                     Asteroidmovement(RandomAsteroid);
-                    //DetectPlayer(playertransform);
+                    DetectPlayer(playertransform);
                 }
             }
             else
             {
                 //If asteroid is reached, then move to another one at random
-                //RandomAsteroid = Random.Range(0, 9);
-                //Asteroidmovement(RandomAsteroid);
+                RandomAsteroid = Random.Range(0, 9);
+                reachedasteroid = false;
             }
           
         }
         else
         {
-            //HuntPlayer(playertransform);
+            HuntPlayer(playertransform);
         }
 
 
@@ -77,10 +76,10 @@ public class Enemy : MonoBehaviour
         //Find direction between enemy and asteroid
         Vector3 enemypos = transform.position;
         Vector3 ChosenAsteroidPosition = ChosenAsteroid.position;
-        Vector3 DirectionMove = enemypos - ChosenAsteroidPosition;
+        Vector3 DirectionMove = ChosenAsteroidPosition - enemypos;
 
         //Calculate variables for velocity
-        float accelerationRate = MaxSpeed / Accelerationtime;
+        float accelerationRate = MaxSpeed / Accelerationtime * 2;
 
         //Set enemy motion towards asteroid
         velocity += accelerationRate * Time.deltaTime * DirectionMove;
@@ -90,13 +89,15 @@ public class Enemy : MonoBehaviour
         
         if (targetmagnitude < Maxrange)
         {
-            //reachedasteroid = true;
+            reachedasteroid = true;
         }
 
 
         //velocity wont exceed this value.
         velocity = Vector3.ClampMagnitude(velocity, MaxSpeed);
-        transform.position += velocity * Time.deltaTime;
+
+        Vector3 direction = (velocity).normalized;
+        transform.position += direction * Time.deltaTime;
 
     }
 
@@ -130,10 +131,10 @@ public class Enemy : MonoBehaviour
         Vector3 enemypos = transform.position;
 
         //find direction between player and enemy
-        Vector3 DirectionMove = enemypos - playerlocation;
+        Vector3 DirectionMove = playerlocation - enemypos;
 
         //Calculate variables for velocity
-        float accelerationRate = MaxSpeed / Accelerationtime;
+        float accelerationRate = MaxSpeed / Accelerationtime * 2;
 
 
         //Set enemy motion towards asteroid
@@ -148,13 +149,14 @@ public class Enemy : MonoBehaviour
         //velocity wont exceed this value.
         velocity = Vector3.ClampMagnitude(velocity, MaxSpeed);
 
-        transform.position += velocity * Time.deltaTime;
+        Vector3 direction = (velocity).normalized;
+        transform.position += direction * Time.deltaTime;
 
 
         //if the player escapes the sight of the enemy, then enemy stops chasing
         if (targetmagnitude > PlayerMaxrange)
         {
-            aggro = false;
+            //aggro = false;
         }
 
     }
