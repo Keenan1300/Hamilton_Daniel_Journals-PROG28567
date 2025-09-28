@@ -13,18 +13,17 @@ public class Enemy : MonoBehaviour
     public float inDistance;
 
     //detector for asteroids
-    public float Maxrange = 3f;
+    public float Maxrange = 0.3f;
 
     //detector for player
-    public float PlayerMaxrange = 10f;
+    public float PlayerMaxrange = 0.7f;
 
     //velocity
     private Vector3 velocity;
 
 
     //movment variables
-    public float MaxSpeed = 3f;
-    public float minspeed = 1f;
+    public float MaxSpeed = 8f;
     public float Accelerationtime = 0.5f;
 
 
@@ -42,8 +41,7 @@ public class Enemy : MonoBehaviour
     private void Update()
     {
 
-        //set deceleration so that movement doesnt continue forever
-        velocity -= velocity * Time.deltaTime * 2;
+       
 
         //Check if enemy is aggro'd
         if (!aggro)
@@ -52,20 +50,20 @@ public class Enemy : MonoBehaviour
             {
                 {
                     Asteroidmovement(RandomAsteroid);
-                    DetectPlayer(playertransform);
+                    //DetectPlayer(playertransform);
                 }
             }
             else
             {
                 //If asteroid is reached, then move to another one at random
-                RandomAsteroid = Random.Range(0, 9);
-                Asteroidmovement(RandomAsteroid);
+                //RandomAsteroid = Random.Range(0, 9);
+                //Asteroidmovement(RandomAsteroid);
             }
           
         }
         else
         {
-            HuntPlayer(playertransform);
+            //HuntPlayer(playertransform);
         }
 
 
@@ -92,8 +90,14 @@ public class Enemy : MonoBehaviour
         
         if (targetmagnitude < Maxrange)
         {
-            reachedasteroid = true;
+            //reachedasteroid = true;
         }
+
+
+        //velocity wont exceed this value.
+        velocity = Vector3.ClampMagnitude(velocity, MaxSpeed);
+        transform.position += velocity * Time.deltaTime;
+
     }
 
     //Check if player is nearby
