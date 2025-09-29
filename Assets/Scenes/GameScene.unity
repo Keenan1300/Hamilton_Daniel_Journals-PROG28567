@@ -221,6 +221,8 @@ MonoBehaviour:
   - {fileID: 287132285}
   - {fileID: 863844780}
   - {fileID: 1266114016}
+  - {fileID: 1266114016}
+  - {fileID: 1266114016}
   PointA: {x: 0, y: 0, z: 0}
   PointB: {x: 0, y: 0, z: 0}
 --- !u!4 &52426800
