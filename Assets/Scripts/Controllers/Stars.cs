@@ -42,7 +42,7 @@ public class Stars : MonoBehaviour
             {
 
                 starnumberA = 0;
-                drawingTime = 0
+                drawingTime = 0;
 
             }
             else if (starnumberB == 10)
