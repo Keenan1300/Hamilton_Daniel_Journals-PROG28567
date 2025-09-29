@@ -1,32 +1,52 @@
+using System.Collections.Generic;
+using System.Net;
 using UnityEngine;
 
 public class LearningTestScript : MonoBehaviour
 {
+    public float radius = 1.0f;
+    public int numberofAngles = 6;
+    public List<float> angles = new List<float>();
 
-    int a;
-    int b;
+    //time
+    public float lineDuration = 10.0f;
+    private float elapsedtime = 0.0f;
+
+    private int currentIndex = 0;
+    private bool isRunning = false;
+
+    public Vector3 cirlecenter = Vector3.zero;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        Debug.Log(NormalizingVector(new Vector2(3, 4)));
-        Debug.Log(NormalizingVector(new Vector2(-3, 2)));
-        Debug.Log(NormalizingVector(new Vector2(1.5f, -3.5f)));
+        for (int i = 0; i < numberofAngles; i++)
+        {
+            angles.Add(Random.value * 360f);
+        }
     }
 
     // Update is called once per frame
     void Update()
     {
-      
+        elapsedtime += Time.deltaTime;
+
+        if (Input.GetKeyDown(KeyCode.Space) || elapsedtime > lineDuration)
+        {
+            currentIndex = (currentIndex + 1) % angles.Count; 
+        }
+
+        float angleinRad = angles[currentIndex] * Mathf.Deg2Rad;
+        float y = Mathf.Sin(angleinRad);
+        float x = Mathf.Cos(angleinRad);
+
+        Vector3 endpoint= new Vector3(x, y, 0) * radius;
+
+        Debug.DrawLine(cirlecenter, cirlecenter + endpoint, Color.green);
 
         
     }
 
-    public Vector2 NormalizingVector(Vector2 Input)
-    {
-        float magnitude = Input.magnitude;
-        Vector2 NormalizedVec = new Vector2 (Input.x/ magnitude,Input.y/magnitude);
-        return NormalizedVec;
-    }
 
 
 

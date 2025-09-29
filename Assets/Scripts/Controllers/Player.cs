@@ -26,17 +26,23 @@ public class Player : MonoBehaviour
     private Vector3 velocity;
 
 
-
+    //movement
     public float MaxSpeed = 3f;
     public float minspeed = 1f;
     public float Accelerationtime = 0.5f;
+
+
+    //shield
+    public int numberofsides;
+    public float radius;
     
 
 
     // Update is called once per frame
     void Update()
     {
-       
+        //draw cirlce
+        drawcirclearoundplayer(radius, numberofsides);
 
 
         //player move left
@@ -82,6 +88,26 @@ public class Player : MonoBehaviour
         {
             Detector(Maxrange, asteroidTransforms);
         }
+    }
+
+    public void drawcirclearoundplayer(float radius, int numberofsides)
+    {
+
+        //float angleinRad = angles[currentIndex] * Mathf.Deg2Rad;
+        //float y = Mathf.Sin(angleinRad);
+        //float x = Mathf.Cos(angleinRad);
+
+        //Vector3 endpoint = new Vector3(x, y, 0) * radius;
+
+        //Debug.DrawLine(cirlecenter, cirlecenter + endpoint, Color.green);
+
+
+
+        //for (int i = 0; i < numberofAngles; i++)
+        {
+            //angles.Add(Random.value * 360f);
+        }
+
     }
 
     //Spawn Bomb at offset
