@@ -11,47 +11,48 @@ public class Asteroid : MonoBehaviour
     //initiate random spot
     public Vector3 RandomSpot;
 
+    public Vector3 velocity;
+
     // Start is called before the first frame update
     void Start()
     {
         //set random direction
-        RandomSpot = new Vector3(Random.Range(-20,20),Random.Range(-20,20),Random.Range(-20,20));
+        RandomSpot = new Vector3(Random.Range(-20,20),Random.Range(-10,10),0);
     }
 
     // Update is called once per frame
     void Update()
     {
+        //Random location is picked, clamp its distance
+        Vector3 RandomSpotFix = Vector3.ClampMagnitude(RandomSpot, maxFloatDistance);
 
-
-        //velocity wont exceed this value.
-        velocity = Vector3.ClampMagnitude(RandomSpot, maxFloatDistance);
 
         //Find direction between enemy and asteroid
-        Vector3 enemypos = transform.position;
-        Vector3 ChosenAsteroidPosition = ChosenAsteroid.position;
-        Vector3 DirectionMove = ChosenAsteroidPosition - enemypos;
+        Vector3 asteroid = transform.position;
+       
+        //Find direction between asteroid spot and randomspot
+        Vector3 DirectionMove = RandomSpotFix - asteroid;
 
-        //Calculate variables for velocity
-        float accelerationRate = MaxSpeed / Accelerationtime * 2;
 
         //Set enemy motion towards asteroid
-        velocity += accelerationRate * Time.deltaTime * DirectionMove;
+        velocity += moveSpeed * Time.deltaTime * DirectionMove;
 
         //set distance to check if enemy is nearby target asteroid
         float targetmagnitude = DirectionMove.magnitude;
 
-        if (targetmagnitude < Maxrange)
+        if (targetmagnitude < arrivalDistance)
         {
-            reachedasteroid = true;
+            ReRollSpot();
         }
-
-
-   
 
         Vector3 direction = (velocity).normalized;
         transform.position += direction * Time.deltaTime;
 
     }
 
-
+    public void ReRollSpot() 
+    {
+        //set random direction
+        RandomSpot = new Vector3(Random.Range(-20, 20), Random.Range(-10, 10), 0);
+    }
 }
