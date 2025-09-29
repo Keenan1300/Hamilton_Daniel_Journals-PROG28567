@@ -48,7 +48,6 @@ public class Stars : MonoBehaviour
 
             }
            
-
             else if (starnumberB < 9)
             {
 
@@ -61,7 +60,6 @@ public class Stars : MonoBehaviour
                 drawingTime = 0;
             
             }
-
             //make sure A is never a problem for looping
             if (starnumberA == 10)
             {
@@ -69,10 +67,7 @@ public class Stars : MonoBehaviour
                 starnumberA = 0;
                 drawingTime = 0;
             }
-
-
         }
-
         //draw
         Debug.DrawLine(PointA, SpaceBetweenPoints);
        
