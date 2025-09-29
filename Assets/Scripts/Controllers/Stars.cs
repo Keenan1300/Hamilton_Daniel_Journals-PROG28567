@@ -7,18 +7,14 @@ public class Stars : MonoBehaviour
 {
     public List<Transform> starTransforms;
     private float drawingTime;
-    private int starnumberB;
-    private int starnumberA;
+    private int starnumberB =1;
+    private int starnumberA = 0;
 
     //initialize vectors
     public Vector3 PointA;
     public Vector3 PointB;
 
-    void Start()
-    {
-         starnumberB = 1;
-         starnumberA = 0;
-    }
+   
 
 // Update is called once per frame
     void Update()
@@ -29,7 +25,7 @@ public class Stars : MonoBehaviour
     public void DrawConstellation(List<Transform> starTransforms)
     {
         //make it so drawing time matches half the rate of real time
-        drawingTime += Time.deltaTime * 0.6f;
+        drawingTime += Time.deltaTime * 0.9f;
 
         Transform starB = starTransforms[starnumberB];
         Transform starA = starTransforms[starnumberA];
@@ -42,12 +38,21 @@ public class Stars : MonoBehaviour
 
         if (drawingTime >= 1)
         {
-            if (starnumberB > 10)
+            if (starnumberB == 9)
+            {
+
+                starnumberA = 0;
+                drawingTime = 0
+
+            }
+            else if (starnumberB == 10)
             {
                 starnumberB = 1;
                 starnumberA = 0;
+                drawingTime = 0;
             }
-            else 
+
+            else if (starnumberB < 9)
             {
 
                 //change b position
@@ -57,6 +62,7 @@ public class Stars : MonoBehaviour
                 starnumberA += 1;
 
                 drawingTime = 0;
+            
             }
 
          
