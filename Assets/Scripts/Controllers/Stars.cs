@@ -38,19 +38,16 @@ public class Stars : MonoBehaviour
 
         if (drawingTime >= 1)
         {
+            //loop b
             if (starnumberB == 9)
             {
 
-                starnumberA = 0;
+                starnumberB = 0;
+                starnumberA = 9;
                 drawingTime = 0;
 
             }
-            else if (starnumberB == 10)
-            {
-                starnumberB = 1;
-                starnumberA = 0;
-                drawingTime = 0;
-            }
+           
 
             else if (starnumberB < 9)
             {
@@ -65,7 +62,15 @@ public class Stars : MonoBehaviour
             
             }
 
-         
+            //make sure A is never a problem for looping
+            if (starnumberA == 10)
+            {
+                starnumberB = 1;
+                starnumberA = 0;
+                drawingTime = 0;
+            }
+
+
         }
 
         //draw
