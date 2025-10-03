@@ -36,15 +36,28 @@ public class LearningTestScript : MonoBehaviour
             currentIndex = (currentIndex + 1) % angles.Count; 
         }
 
-        float angleinRad = angles[currentIndex] * Mathf.Deg2Rad;
-        float y = Mathf.Sin(angleinRad);
-        float x = Mathf.Cos(angleinRad);
+        float PointA = angles[currentIndex] * Mathf.Deg2Rad;
 
-        Vector3 endpoint= new Vector3(x, y, 0) * radius;
+        float PointB = angles[currentIndex] * Mathf.Deg2Rad;
 
-        Debug.DrawLine(cirlecenter, cirlecenter + endpoint, Color.green);
+        //Find vector for point A
+        float Ay = Mathf.Sin(PointA);
+        float Ax = Mathf.Cos(PointA);
 
+        //Find vector for point B
+        float By = Mathf.Sin(PointB);
+        float Bx = Mathf.Cos(PointB);
+
+        //A spot used to be called Point
+        Vector3 PointASpot = new Vector3(Ax, Ay, 0) * radius;
+
+        //B spot is experimental
+        Vector3 PointBSpot = new Vector3(Bx, By, 0) * radius;
         
+        //Debug.DrawLine(cirlecenter, cirlecenter + Point, Color.green);
+        Debug.DrawLine(cirlecenter + PointASpot, cirlecenter + PointBSpot, Color.green);
+
+
     }
 
 
