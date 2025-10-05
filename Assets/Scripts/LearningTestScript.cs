@@ -20,42 +20,57 @@ public class LearningTestScript : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        for (int i = 0; i < numberofAngles; i++)
+        currentIndex = 0;
+
+        //calculate vertices
+        for (int i = 0; i < numberofAngles + 1; i++)
         {
-            angles.Add(Random.value * 360f);
+            float floatconvert = i;
+            angles.Add(floatconvert / numberofAngles * 360f);
         }
     }
 
     // Update is called once per frame
     void Update()
     {
-        elapsedtime += Time.deltaTime;
+     
 
-        if (Input.GetKeyDown(KeyCode.Space) || elapsedtime > lineDuration)
-        {
-            currentIndex = (currentIndex + 1) % angles.Count; 
-        }
-
-        float PointA = angles[currentIndex] * Mathf.Deg2Rad;
-
-        float PointB = angles[currentIndex] * Mathf.Deg2Rad;
-
-        //Find vector for point A
-        float Ay = Mathf.Sin(PointA);
-        float Ax = Mathf.Cos(PointA);
-
-        //Find vector for point B
-        float By = Mathf.Sin(PointB);
-        float Bx = Mathf.Cos(PointB);
-
-        //A spot used to be called Point
-        Vector3 PointASpot = new Vector3(Ax, Ay, 0) * radius;
-
-        //B spot is experimental
-        Vector3 PointBSpot = new Vector3(Bx, By, 0) * radius;
+              //Draw force field
         
-        //Debug.DrawLine(cirlecenter, cirlecenter + Point, Color.green);
-        Debug.DrawLine(cirlecenter + PointASpot, cirlecenter + PointBSpot, Color.green);
+             currentIndex = (currentIndex + 1) % angles.Count; 
+            
+
+
+             float PointA = angles[currentIndex] * Mathf.Deg2Rad;
+
+             float PointB = angles[currentIndex + 1] * Mathf.Deg2Rad;
+            
+
+            //Find vector for point A
+            //find y
+            float Ay = Mathf.Sin(PointA);
+
+            //find x 
+            float Ax = Mathf.Cos(PointA);
+
+
+
+            //Find vector for point B
+            //find y
+            float By = Mathf.Sin(PointB);
+
+            //find x
+            float Bx = Mathf.Cos(PointB);
+
+
+            //A spot used to be called Point
+            Vector3 PointASpot = new Vector3(Ax, Ay, 0) * radius;
+
+            //B spot is experimental
+            Vector3 PointBSpot = new Vector3(Bx, By, 0) * radius;
+        
+            Debug.DrawLine(cirlecenter + PointASpot, cirlecenter + PointBSpot, Color.green);
+            //Debug.DrawLine(cirlecenter + PointASpot, cirlecenter + PointBSpot, Color.green);
 
 
     }
