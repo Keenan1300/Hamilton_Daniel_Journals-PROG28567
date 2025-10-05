@@ -8,6 +8,20 @@ public class Player : MonoBehaviour
     public List<Transform> asteroidTransforms;
 
 
+    //force field
+    public float radius = 1.0f;
+    public int circlePoints = 6;
+    public List<float> angles = new List<float>();
+
+    //time
+    public float lineDuration = 10.0f;
+    private float elapsedtime = 0.0f;
+
+    private int currentIndex = 0;
+    private bool isRunning = false;
+
+
+
     //Variables
     public float BombSpacing;
     public int NumberOfBombs;
@@ -18,6 +32,9 @@ public class Player : MonoBehaviour
     public float inDistance;
 
     public float distanceratio;
+
+
+
 
     //detector
     public float Maxrange;
@@ -31,18 +48,26 @@ public class Player : MonoBehaviour
     public float minspeed = 1f;
     public float Accelerationtime = 0.5f;
 
-
-    //shield
-    public int numberofsides;
-    public float radius;
     
 
+    void Start()
+    {
+        //setup variables
+        currentIndex = 0;
+
+        //calculate vertices
+        for (int i = 0; i < circlePoints + 1; i++)
+        {
+            float floatconvert = i;
+            angles.Add(floatconvert / circlePoints * 360f);
+        }
+    }
 
     // Update is called once per frame
     void Update()
     {
         //draw cirlce
-        drawcirclearoundplayer(radius, numberofsides);
+        EnemyRadar(radius, circlePoints);
 
 
         //player move left
@@ -90,25 +115,6 @@ public class Player : MonoBehaviour
         }
     }
 
-    public void drawcirclearoundplayer(float radius, int numberofsides)
-    {
-
-        //float angleinRad = angles[currentIndex] * Mathf.Deg2Rad;
-        //float y = Mathf.Sin(angleinRad);
-        //float x = Mathf.Cos(angleinRad);
-
-        //Vector3 endpoint = new Vector3(x, y, 0) * radius;
-
-        //Debug.DrawLine(cirlecenter, cirlecenter + endpoint, Color.green);
-
-
-
-        //for (int i = 0; i < numberofAngles; i++)
-        {
-            //angles.Add(Random.value * 360f);
-        }
-
-    }
 
     //Spawn Bomb at offset
     private void SpawnBombAtOffset(Vector3 inOffset)
@@ -269,5 +275,61 @@ public class Player : MonoBehaviour
         transform.position += velocity * Time.deltaTime;
 
     }
+
+    public void EnemyRadar(float radius, int circlePoints)
+    {
+        Vector3 Playerpos = transform.position;
+        Vector3 EnemyPos = enemyTransform.position;
+
+        //Draw force field
+        currentIndex = (currentIndex + 1) % angles.Count;
+
+
+
+        float PointA = angles[currentIndex] * Mathf.Deg2Rad;
+
+        float PointB = angles[currentIndex + 1] * Mathf.Deg2Rad;
+
+
+        //Find vector for point A
+        //find y
+        float Ay = Mathf.Sin(PointA);
+
+        //find x 
+        float Ax = Mathf.Cos(PointA);
+
+
+
+        //Find vector for point B
+        //find y
+        float By = Mathf.Sin(PointB);
+
+        //find x
+        float Bx = Mathf.Cos(PointB);
+
+
+        //A spot used to be called Point
+        Vector3 PointASpot = new Vector3(Ax, Ay, 0) * radius;
+
+        //B spot is experimental
+        Vector3 PointBSpot = new Vector3(Bx, By, 0) * radius;
+
+
+        Vector3 PlayerEnemyDist = EnemyPos - Playerpos;
+        float PlayerEnemyMag = PlayerEnemyDist.magnitude;
+
+        if (PlayerEnemyMag > radius)
+        {
+            Debug.DrawLine(Playerpos + PointASpot, Playerpos + PointBSpot, Color.green);
+        }
+        else
+        {
+            Debug.DrawLine(Playerpos + PointASpot, Playerpos + PointBSpot, Color.red);
+        }
+
+
+    }
+
+
 
 }

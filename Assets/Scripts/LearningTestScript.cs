@@ -17,6 +17,8 @@ public class LearningTestScript : MonoBehaviour
 
     public Vector3 cirlecenter = Vector3.zero;
 
+    public Transform Player;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -33,7 +35,7 @@ public class LearningTestScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-     
+            Vector3 Playerpos = Player.position;
 
               //Draw force field
         
@@ -69,7 +71,7 @@ public class LearningTestScript : MonoBehaviour
             //B spot is experimental
             Vector3 PointBSpot = new Vector3(Bx, By, 0) * radius;
         
-            Debug.DrawLine(cirlecenter + PointASpot, cirlecenter + PointBSpot, Color.green);
+            Debug.DrawLine(Playerpos + PointASpot, Playerpos + PointBSpot, Color.green);
             //Debug.DrawLine(cirlecenter + PointASpot, cirlecenter + PointBSpot, Color.green);
 
 
