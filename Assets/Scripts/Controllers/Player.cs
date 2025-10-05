@@ -15,8 +15,11 @@ public class Player : MonoBehaviour
     public int circlePoints = 6;
     public List<float> angles = new List<float>();
 
+    //Add separate list so powerups work independently of shield
+    public List<float> PowerUps = new List<float>();
+
     //PowerUps
-    int numberOfPowerups = 3;
+    public int numberOfPowerups = 3;
     public float Powerradius = 1.0f;
 
     //time
@@ -67,11 +70,18 @@ public class Player : MonoBehaviour
             float floatconvert = i;
             angles.Add(floatconvert / circlePoints * 360f);
         }
+
+       
+
+        //Draw PowerUps
+        SpawnPowerups(Powerradius, numberOfPowerups);
     }
 
     // Update is called once per frame
     void Update()
     {
+        
+
         //draw cirlce
         EnemyRadar(radius, circlePoints);
 
@@ -340,13 +350,19 @@ public class Player : MonoBehaviour
     public void SpawnPowerups(float Powerradius, int numberOfPowerups)
     {
 
+
         //calculate vertices
         for (int i = 0; i < numberOfPowerups + 1; i++)
         {
             float floatconvert = i;
-            angles.Add(floatconvert / circlePoints * 360f);
+            PowerUps.Add(floatconvert / numberOfPowerups * 360f);
+        }
 
-            float PointA = angles[currentIndex] * Mathf.Deg2Rad;
+        //spawn bombs
+        for (int i = 0; i < numberOfPowerups + 1; i++)
+        {
+            currentIndex = (currentIndex + 1) % PowerUps.Count;
+            float PointA = PowerUps[currentIndex] * Mathf.Deg2Rad;
 
 
 
@@ -360,10 +376,11 @@ public class Player : MonoBehaviour
 
             //A spot used to be called Point
             Vector3 PointASpot = new Vector3(Ax, Ay, 0) * Powerradius;
+            Vector3 pos = transform.position;
 
-            instantiate(UpgradePrefab, PointASpot, Quaternion.identity);
+            Instantiate(UpgradePrefab, PointASpot + pos, Quaternion.identity);
+
         }
-
 
         //Vector3 Playerpos = transform.position;
 
