@@ -5,6 +5,8 @@ public class Player : MonoBehaviour
 {
     public Transform enemyTransform;
     public GameObject bombPrefab;
+    public GameObject UpgradePrefab;
+
     public List<Transform> asteroidTransforms;
 
 
@@ -12,6 +14,10 @@ public class Player : MonoBehaviour
     public float radius = 1.0f;
     public int circlePoints = 6;
     public List<float> angles = new List<float>();
+
+    //PowerUps
+    int numberOfPowerups = 3;
+    public float Powerradius = 1.0f;
 
     //time
     public float lineDuration = 10.0f;
@@ -331,5 +337,48 @@ public class Player : MonoBehaviour
     }
 
 
+    public void SpawnPowerups(float Powerradius, int numberOfPowerups)
+    {
 
+        //calculate vertices
+        for (int i = 0; i < numberOfPowerups + 1; i++)
+        {
+            float floatconvert = i;
+            angles.Add(floatconvert / circlePoints * 360f);
+
+            float PointA = angles[currentIndex] * Mathf.Deg2Rad;
+
+
+
+            //Find vector for point A
+            //find y
+            float Ay = Mathf.Sin(PointA);
+
+            //find x 
+            float Ax = Mathf.Cos(PointA);
+
+
+            //A spot used to be called Point
+            Vector3 PointASpot = new Vector3(Ax, Ay, 0) * Powerradius;
+
+            instantiate(UpgradePrefab, PointASpot, Quaternion.identity);
+        }
+
+
+        //Vector3 Playerpos = transform.position;
+
+        //Draw force field
+        //currentIndex = (currentIndex + 1) % angles.Count;
+
+
+
+    
+
+
+       
+
+  
+
+
+    }
 }
