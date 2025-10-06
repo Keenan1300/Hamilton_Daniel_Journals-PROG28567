@@ -43,7 +43,9 @@ public class Player : MonoBehaviour
 
     public float distanceratio;
 
-
+    //Rotation Dynamics
+    float x = 0;
+    float y = 0;
 
 
     //detector
@@ -259,6 +261,7 @@ public class Player : MonoBehaviour
         if (playerpos.x < 20 && playerpos.y < 20 && playerpos.x > -20 && playerpos.y > -20)
         {
 
+
             if (Input.GetKey(KeyCode.LeftArrow))
             {
                 velocity += accelerationRate * Time.deltaTime * Vector3.left;
@@ -284,13 +287,54 @@ public class Player : MonoBehaviour
         else
         {
             playerpos = new Vector2(playerpos.x / 2, playerpos.y / 2);
+            playerpos.Normalize();
         }
+
+
+
+
+
+
+        if (playerpos != Vector2.zero)
+        {
+
+            //reset x and y
+            x = 0; y = 0;
+
+            //Input Detection
+            if (Input.GetKey(KeyCode.LeftArrow)) x = 1;
+            if (Input.GetKey(KeyCode.RightArrow)) x = -1;
+
+            if (Input.GetKey(KeyCode.UpArrow)) y = 1;
+            if (Input.GetKey(KeyCode.DownArrow)) y = -1;
+
+            //calculate direction
+            Vector3 moveDir = new Vector3(x, y, 0);
+            moveDir.Normalize();
+
+            //calculate angle
+            float targetAngle = Mathf.Atan2(moveDir.x, moveDir.y) * Mathf.Rad2Deg;
+
+            // Create target rotation
+            Quaternion targetRotation = Quaternion.Euler(0f, targetAngle, 0f);
+
+            // Smoothly rotate toward the snapped direction
+            transform.rotation = Quaternion.AngleAxis(targetAngle, Vector3.forward);
+
+
+        }
+       
+
+
+
+
+
 
         //velocity wont exceed this value.
         velocity = Vector3.ClampMagnitude(velocity,MaxSpeed);
 
         transform.position += velocity * Time.deltaTime;
-
+        
     }
 
     public void EnemyRadar(float radius, int circlePoints)
@@ -383,12 +427,6 @@ public class Player : MonoBehaviour
             Instantiate(UpgradePrefab, PointASpot + pos, Quaternion.identity);
 
         }
-
-        //Vector3 Playerpos = transform.position;
-
-        //Draw force field
-        //currentIndex = (currentIndex + 1) % angles.Count;
-
 
 
     
