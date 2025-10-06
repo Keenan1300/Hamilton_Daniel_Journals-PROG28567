@@ -9,7 +9,8 @@ public class Moon : MonoBehaviour
 
     public float OrbitalSpeed = 0.5f;
     public float radius = 2f;
-    private int currentIndex = 0;
+    private int currentIndexA = 0;
+    private int currentIndexB = 0;
 
     public float LerpTransition = 0.01f;
 
@@ -46,19 +47,19 @@ public class Moon : MonoBehaviour
         if (LerpTransition >= 1)
         {
             LerpTransition = 0;
-            currentIndex = (currentIndex + 1) % OrbitSpots.Count;
+            currentIndexA = (currentIndexA + 1) % OrbitSpots.Count;
         }
 
 
      
 
         //move from A to B
-        float MoveTargetA = OrbitSpots[currentIndex] * Mathf.Deg2Rad;
+        float MoveTargetA = OrbitSpots[currentIndexA] * Mathf.Deg2Rad;
         float Ay = Mathf.Sin(MoveTargetA);
         float Ax = Mathf.Cos(MoveTargetA);
         Vector3 PointASpot = new Vector3(Ax, Ay, 0) * radius;
 
-        float MoveTargetB = OrbitSpots[currentIndex + 1] * Mathf.Deg2Rad;
+        float MoveTargetB = OrbitSpots[currentIndexB + 1] * Mathf.Deg2Rad;
         float By = Mathf.Sin(MoveTargetA);
         float Bx = Mathf.Cos(MoveTargetA);
         Vector3 PointBSpot = new Vector3(Bx, By, 0) * radius;
