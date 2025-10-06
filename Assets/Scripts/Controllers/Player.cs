@@ -27,6 +27,7 @@ public class Player : MonoBehaviour
     private float elapsedtime = 0.0f;
 
     private int currentIndex = 0;
+    private int currentIndex2 = 1;
     private bool isRunning = false;
 
 
@@ -299,12 +300,13 @@ public class Player : MonoBehaviour
 
         //Draw force field
         currentIndex = (currentIndex + 1) % angles.Count;
+        currentIndex2 = (currentIndex2 + 1) % angles.Count;
 
 
 
         float PointA = angles[currentIndex] * Mathf.Deg2Rad;
 
-        float PointB = angles[currentIndex + 1] * Mathf.Deg2Rad;
+        float PointB = angles[currentIndex2] * Mathf.Deg2Rad;
 
 
         //Find vector for point A
