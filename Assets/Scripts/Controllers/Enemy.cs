@@ -12,10 +12,10 @@ public class Enemy : MonoBehaviour
 
 
     //detector for asteroids
-    public float Maxrange = 0.3f;
+    public float Maxrange = 2f;
 
     //detector for player
-    public float PlayerMaxrange = 50f;
+    public float PlayerMaxrange = 0.5f;
 
     //velocity
     private Vector3 velocity;
@@ -30,7 +30,7 @@ public class Enemy : MonoBehaviour
     public bool aggro;
     public bool reachedasteroid;
 
-    private void start() 
+    private void Start() 
     {
         aggro = false;
         reachedasteroid = false;
@@ -71,12 +71,11 @@ public class Enemy : MonoBehaviour
     //movement method
     public void Asteroidmovement(int RandomAsteroid)
     {
-       Transform ChosenAsteroid = asteroidTransforms[RandomAsteroid];
+       Vector3 ChosenAsteroid = asteroidTransforms[RandomAsteroid].position;
        
         //Find direction between enemy and asteroid
         Vector3 enemypos = transform.position;
-        Vector3 ChosenAsteroidPosition = ChosenAsteroid.position;
-        Vector3 DirectionMove = ChosenAsteroidPosition - enemypos;
+        Vector3 DirectionMove = (ChosenAsteroid - enemypos).normalized;
 
         //Calculate variables for velocity
         float accelerationRate = MaxSpeed / Accelerationtime * 2;
@@ -109,14 +108,14 @@ public class Enemy : MonoBehaviour
         Vector3 enemypos = transform.position;
 
         //find direction between player and enemy
-        Vector3 DirectionMove = enemypos - playerlocation;
+        Vector3 DirectionMove = (enemypos - playerlocation).normalized;
 
         //set distance to check if enemy is nearby target asteroid
         float targetmagnitude = DirectionMove.magnitude;
 
 
 
-        if (targetmagnitude < PlayerMaxrange)
+        if (targetmagnitude > PlayerMaxrange)
         {
             aggro = true;
         }

@@ -46,7 +46,7 @@ public class Asteroid : MonoBehaviour
         }
 
         Vector3 direction = (velocity).normalized;
-        transform.position += direction * Time.deltaTime;
+        transform.position += direction * Time.deltaTime * moveSpeed;
 
     }
 
