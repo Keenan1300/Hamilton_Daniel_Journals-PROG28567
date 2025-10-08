@@ -61,8 +61,11 @@ public class Asteroid : MonoBehaviour
             //Find player position
             Vector3 PlayerPos = player.position;
 
+
             //Find direction between player and asteroid
             Vector3 asteroid = transform.position;
+
+
 
             //Find direction between asteroid spot and player
             Vector3 DirectionMove = PlayerPos - asteroid;
