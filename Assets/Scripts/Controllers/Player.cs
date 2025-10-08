@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class Player : MonoBehaviour
 {
@@ -7,7 +8,13 @@ public class Player : MonoBehaviour
     public GameObject bombPrefab;
     public GameObject UpgradePrefab;
 
+    public Asteroid CaughtAsteroid;
+
+    public UnityEvent Magnetize;
+
     public List<Transform> asteroidTransforms;
+
+    public List<GameObject> Asteroids;
 
 
     //force field
@@ -132,6 +139,12 @@ public class Player : MonoBehaviour
         {
             Detector(Maxrange, asteroidTransforms);
         }
+
+        //Asteroid Magnet
+        if (Input.GetKey(KeyCode.M))
+        {
+            Magnet(Maxrange, Asteroids);
+        }
     }
 
 
@@ -229,7 +242,7 @@ public class Player : MonoBehaviour
         Vector3 playerpos = transform.position;
 
         //Find out where a particular asteroid is
-        for (int i = 0; i < 10; i++)
+        for (int i = 0; i < asteroidTransforms.Count; i++)
         {
             Transform Asteroid = asteroidTransforms[i];
             Vector3 AsteroidPosition = Asteroid.position;
@@ -238,7 +251,7 @@ public class Player : MonoBehaviour
             Vector3 Asteroidnorm = AsteroidPosition.normalized;
             float AstroidMag = AsteroidPosition.magnitude;
 
-            print("the length of asteroid is" + AstroidMag);
+            //print("the length of asteroid is" + AstroidMag);
 
             if (AstroidMag < Maxrange)
             {
@@ -438,4 +451,43 @@ public class Player : MonoBehaviour
 
 
     }
+
+
+    //Magnet Pull functionality
+    public void Magnet(float Maxrange, List<GameObject> Asteroids)
+    {
+        //setup player spot
+        Vector3 playerpos = transform.position;
+
+        //Find out where a particular asteroid is
+        for (int i = 0; i < Asteroids.Count; i++)
+        {
+            Transform Asteroid = Asteroids[i].transform;
+            Vector3 AsteroidPosition = Asteroid.position;
+
+            float PlayerToAsteroidDist = Vector3.Distance(AsteroidPosition, playerpos);
+            Vector3 Asteroidnorm = AsteroidPosition.normalized;
+            float AstroidMag = AsteroidPosition.magnitude;
+
+            GameObject CaughtAsteroid = Asteroids[i];
+            Asteroid ScriptAsteroid = Asteroids[i].GetComponent<Asteroid>();
+
+
+            if (AstroidMag < Maxrange)
+            {
+
+                ScriptAsteroid.magnetize();
+                print("should magnetize!!");
+            }
+            else
+            {
+                print("no mag");
+            }
+
+        }
+
+    }
+
+
+
 }
