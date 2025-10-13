@@ -1849,6 +1849,10 @@ PrefabInstance:
       value: 4.75
       objectReference: {fileID: 0}
     - target: {fileID: 6890330259706833056, guid: abc125f00ae369940b2c5c0275186637, type: 3}
+      propertyPath: HomingMissile
+      value: 
+      objectReference: {fileID: 6011140466511043100, guid: 0358495ae2e0c564cbac746d17214f50, type: 3}
+    - target: {fileID: 6890330259706833056, guid: abc125f00ae369940b2c5c0275186637, type: 3}
       propertyPath: NumberOfBombs
       value: 11
       objectReference: {fileID: 0}
@@ -1876,6 +1880,10 @@ PrefabInstance:
       propertyPath: numberOfTrailBombs
       value: 3
       objectReference: {fileID: 0}
+    - target: {fileID: 6890330259706833056, guid: abc125f00ae369940b2c5c0275186637, type: 3}
+      propertyPath: HomingMissileObject
+      value: 
+      objectReference: {fileID: 3551259822933155846, guid: 0358495ae2e0c564cbac746d17214f50, type: 3}
     - target: {fileID: 6890330259706833056, guid: abc125f00ae369940b2c5c0275186637, type: 3}
       propertyPath: Asteroids.Array.size
       value: 10

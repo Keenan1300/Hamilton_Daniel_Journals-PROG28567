@@ -8,6 +8,9 @@ public class Player : MonoBehaviour
     public GameObject bombPrefab;
     public GameObject UpgradePrefab;
 
+    public GameObject HomingMissileObject;
+    public HomingMissile HomingMissile;
+
     public Asteroid CaughtAsteroid;
 
     public UnityEvent Magnetize;
@@ -61,6 +64,8 @@ public class Player : MonoBehaviour
     //velocity
     private Vector3 velocity;
 
+    //Momentum
+    public Vector3 Momentum;
 
     //movement
     public float MaxSpeed = 3f;
@@ -71,6 +76,9 @@ public class Player : MonoBehaviour
 
     void Start()
     {
+
+
+
         //setup variables
         currentIndex = 0;
 
@@ -100,6 +108,13 @@ public class Player : MonoBehaviour
         PlayerMovement();
 
 
+        //shoothomingbomb
+        if (Input.GetMouseButtonDown(1))
+        {
+            ShootHomingMissile();
+
+        }
+
         //Instantiate bomb at inOffset
         if (Input.GetKeyDown(KeyCode.T))
         {
@@ -112,7 +127,7 @@ public class Player : MonoBehaviour
         if (Input.GetKey(KeyCode.B))
         {
 
-            SpawnBombAtOffset(new Vector3(0, 1));
+            SpawnBombAtOffset(new Vector3(0, 0, 1));
 
         }
 
@@ -147,6 +162,20 @@ public class Player : MonoBehaviour
         }
     }
 
+
+    //Spawn Homing Missile
+    private void ShootHomingMissile()
+    {
+        Vector3 SpawnPosition = transform.position;
+
+        //make homing missile inherit enemyposition variable
+        HomingMissile = HomingMissileObject.GetComponent<HomingMissile>();
+        HomingMissile.enemy = enemyTransform;
+
+        Instantiate(HomingMissileObject, SpawnPosition, transform.rotation);
+
+        
+    }
 
     //Spawn Bomb at offset
     private void SpawnBombAtOffset(Vector3 inOffset)
