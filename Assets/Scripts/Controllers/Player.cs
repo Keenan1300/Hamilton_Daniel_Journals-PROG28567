@@ -72,6 +72,7 @@ public class Player : MonoBehaviour
     public float minspeed = 1f;
     public float Accelerationtime = 0.5f;
 
+    private Color Radarcolor = Color.green;
     
 
     void Start()
@@ -158,8 +159,12 @@ public class Player : MonoBehaviour
         //Asteroid Magnet
         if (Input.GetKey(KeyCode.M))
         {
+            Detector(Maxrange, asteroidTransforms);
+            Radarcolor = Color.magenta;
             Magnet(Maxrange, Asteroids);
+
         }
+        else Radarcolor = Color.green;
     }
 
 
@@ -284,7 +289,7 @@ public class Player : MonoBehaviour
 
             if (AstroidMag < Maxrange)
             {
-                Debug.DrawLine(playerpos, AsteroidPosition, Color.green);
+                Debug.DrawLine(playerpos, AsteroidPosition, Radarcolor);
             }
           
         }
@@ -424,7 +429,7 @@ public class Player : MonoBehaviour
 
         if (PlayerEnemyMag > radius)
         {
-            Debug.DrawLine(Playerpos + PointASpot, Playerpos + PointBSpot, Color.green);
+            Debug.DrawLine(Playerpos + PointASpot, Playerpos + PointBSpot, Radarcolor);
         }
         else
         {

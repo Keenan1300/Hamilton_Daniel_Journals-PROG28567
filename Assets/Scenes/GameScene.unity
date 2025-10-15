@@ -852,6 +852,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 114516115454935764, guid: e3900e4d87ee29c43ad1d9098b51432c, type: 3}
+      propertyPath: MaxSpeed
+      value: 39.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 114516115454935764, guid: e3900e4d87ee29c43ad1d9098b51432c, type: 3}
       propertyPath: PlayerMaxrange
       value: 9.7
       objectReference: {fileID: 0}
@@ -859,6 +863,10 @@ PrefabInstance:
       propertyPath: playertransform
       value: 
       objectReference: {fileID: 2135378117}
+    - target: {fileID: 114516115454935764, guid: e3900e4d87ee29c43ad1d9098b51432c, type: 3}
+      propertyPath: Accelerationtime
+      value: 1.26
+      objectReference: {fileID: 0}
     - target: {fileID: 114516115454935764, guid: e3900e4d87ee29c43ad1d9098b51432c, type: 3}
       propertyPath: asteroidTransforms.Array.size
       value: 10

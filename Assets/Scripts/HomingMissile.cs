@@ -34,6 +34,11 @@ public class HomingMissile : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+
+
+        //missile will explode after 5 seconds
+        Destroy(gameObject,5);
+
         //constantly update where major positions are
         Vector3 pos = transform.position;
         Vector3 target = enemy.position;

@@ -5,9 +5,10 @@ using UnityEngine.InputSystem;
 
 public class Asteroid : MonoBehaviour
 {
-    public float moveSpeed;
-    public float arrivalDistance;
-    public float maxFloatDistance;
+    private float moveSpeed = 5f;
+    private float MaxSpeed = 3f;
+    private float arrivalDistance = 0.2f;
+    private float maxFloatDistance = 2f;
 
     //initiate random spot
     public Vector3 RandomSpot;
@@ -56,8 +57,8 @@ public class Asteroid : MonoBehaviour
         }
         else 
         {
-            //If Magnetic = true;
-            
+          
+
             //Find player position
             Vector3 PlayerPos = player.position;
 
@@ -68,14 +69,16 @@ public class Asteroid : MonoBehaviour
 
 
             //Find direction between asteroid spot and player
-            Vector3 DirectionMove = PlayerPos - asteroid;
+            Vector3 DirectionMove = (PlayerPos - asteroid).normalized;
 
+
+            //velocity wont exceed this value.
+            velocity = Vector3.ClampMagnitude(velocity, MaxSpeed);
 
             //Set enemy motion towards player
-            velocity += moveSpeed * Time.deltaTime * DirectionMove;
+            velocity += 5f * Time.deltaTime * DirectionMove;
 
-            Vector3 direction = (velocity).normalized;
-            transform.position += direction * Time.deltaTime;
+            transform.position += velocity * Time.deltaTime;
 
         }
     }
