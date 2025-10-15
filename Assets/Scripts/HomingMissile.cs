@@ -4,7 +4,7 @@ public class HomingMissile : MonoBehaviour
 {
 
     //angularspeed
-     private float angularspeedDeg = 90f;
+     private float angularspeedDeg = 120f;
 
     //Target Vector
     public Transform enemy;
@@ -19,8 +19,7 @@ public class HomingMissile : MonoBehaviour
     bool foundtarget = false;
 
     //movement
-    public float MaxSpeed = 3f;
-    public float minspeed = 1f;
+    private float MaxSpeed = 7f;
     public float Accelerationtime = 0.5f;
     public float DecelerationRate = 2f;
 
@@ -35,21 +34,35 @@ public class HomingMissile : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        //constantly update where major positions are
+        Vector3 pos = transform.position;
+        Vector3 target = enemy.position;
 
-        //deceleration
-        velocity -= velocity * Time.deltaTime * DecelerationRate;
+        //find second vector
+        Vector3 directionV = target - pos;
 
-        float accelerationRate = MaxSpeed / Accelerationtime;
+        //find the magnitude between missile and target so that missile would explode if close enough to target
+        //prevents akward moments where player shoots ontop of enemy and missile doesnt immediatley explode
+        float MissileExploadDist = directionV.magnitude;
+        print(MissileExploadDist);
 
 
-        if (!foundtarget)
+        if (MissileExploadDist < 0.8f)
         {
+            Destroy(gameObject);
+        }
+
+            //Speed control for acceleration
+            float accelerationRate = MaxSpeed / Accelerationtime;
+
+
+
             //find second vector
-            Vector3 directionV = (enemy.position - transform.position).normalized;
+            Vector3 directionVnormed = (enemy.position - transform.position).normalized;
 
             //first need to convert both vectors into floats using atan2!
             float upAngle = Mathf.Atan2(transform.position.y, transform.position.x);
-            float directionangle = Mathf.Atan2(directionV.y, directionV.x);
+            float directionangle = Mathf.Atan2(directionVnormed.y, directionVnormed.x);
 
 
             //now you can use delta angle to find shortest angle between these 2
@@ -57,24 +70,45 @@ public class HomingMissile : MonoBehaviour
 
 
             //calculate direction vector as a dot product representing -1.0 to 1.0
-            float DotProd = Vector3.Dot(transform.up, directionV);
+            float DotProd = Vector3.Dot(transform.up, directionVnormed);
 
 
-            //Sign makes the turret change direction that best suites the location of the enemy.
-            //Basically go the other way if the turret is closer when moving in that direction
+            //Missile rotates clockwise, or counter clock wise depending on whatever method is quicker to aligning to target
             float sign = Mathf.Sign(deltaangle);
 
+
+         
+
+        if (!foundtarget)
+            {
+
+            //if missile is not facing enemy, rotate towards them to do so
             if (DotProd < 0.999f)
             {
+
                 transform.Rotate(0, 0, angularspeedDeg * Time.deltaTime * sign);
+
             }
-            else foundtarget = true;
 
 
-            Vector3 pos = transform.position;
-            Vector3 upness = transform.up;
+            if (DotProd > 0.999f)
+             {
 
-        }
+                foundtarget = true;
+
+             }
+
+
+
+
+           
+
+             //Add velocity
+             velocity += directionV * Time.deltaTime * accelerationRate * 10;
+             velocity = Vector3.ClampMagnitude(velocity, MaxSpeed);
+             transform.position += transform.up * MaxSpeed * Time.deltaTime;
+    
+            }
 
 
 
@@ -82,24 +116,9 @@ public class HomingMissile : MonoBehaviour
         {
 
 
-            Vector3 pos = transform.position;
-            Vector3 target = enemy.position;
-            //find second vector
-            Vector3 directionV = target - pos;
-
-            float MissileExploadDist = directionV.magnitude;
-            print(MissileExploadDist);
-
-
-          
-
-            if (MissileExploadDist < 0.1f)
-            {
-                Destroy(gameObject);
-            }
 
             //Add velocity
-            velocity += directionV * Time.deltaTime * accelerationRate * 10;
+            velocity += directionVnormed * Time.deltaTime * accelerationRate * 10;
 
             //velocity wont exceed this value.
             velocity = Vector3.ClampMagnitude(velocity, MaxSpeed);
