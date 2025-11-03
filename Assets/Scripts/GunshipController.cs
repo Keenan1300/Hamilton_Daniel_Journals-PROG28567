@@ -1,4 +1,5 @@
 using UnityEngine;
+using static UnityEngine.GraphicsBuffer;
 
 public class GunshipController : MonoBehaviour
 {
@@ -13,7 +14,24 @@ public class GunshipController : MonoBehaviour
         Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         
         Vector3 leftDirection = AimCannon(mousePosition, leftCannon);
+
+
         Vector3 rightDirection = AimCannon(mousePosition, rightCannon);
+
+ 
+       
+
+        if (Input.GetMouseButtonDown(0))
+        {
+            FireCannonball(leftDirection, leftCannon);
+           
+         
+
+        }
+        if (Input.GetMouseButtonDown(1))
+        {
+            FireCannonball(rightDirection, rightCannon);
+        }    
 
     }
 
@@ -30,6 +48,8 @@ public class GunshipController : MonoBehaviour
 
     private void FireCannonball(Vector3 direction, Transform cannon)
     {
-        
+        GameObject cannonball = Instantiate(cannonballPrefab, cannon.position,Quaternion.identity);
+        Rigidbody2D body2D = cannonball.GetComponent<Rigidbody2D>();
+        body2D.AddForce(direction.normalized * cannonballForce);
     }
 }
