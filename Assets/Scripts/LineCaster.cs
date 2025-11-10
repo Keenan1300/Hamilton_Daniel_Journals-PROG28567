@@ -23,7 +23,7 @@ public class LineCaster : MonoBehaviour
         RaycastHit2D hit = Physics2D.Linecast(Point1, Point2, hitLayers);
         if (hit)
         {
-            print("Passedline!");
+            print("Passedlined!");
         }
     }
 }
