@@ -6,13 +6,24 @@ using UnityEngine.UIElements;
 
 public class PlayerController : MonoBehaviour
 {
-    private Vector3 velocity = new Vector3(2,2,0);
-    private float gravity;
-    private float Jumpvelocity;
+    private Vector3 velocity = new Vector3(2, 2, 0);
+
+    public float maxSpeed = 12;
+    public float accelerationTime = 2;
+    public float decelerationTime = 2;
+    
+    [Header("Jump properties")]
     public float apexHeight = 5;
     public float apexTime = 3;
-    public float jumpVel;
+
+    private float accelSpeed;
+    private float decelSpeed;
+
+    private float jumpVel;
+    private float gravity;
+    
     public LayerMask groundlayer;
+
 
     public enum FacingDirection
     {
@@ -23,17 +34,17 @@ public class PlayerController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
-        float Jumpvelocity = 2 * apexHeight / apexTime;
-        float gravity = -2 * apexHeight / (Mathf.Pow(apexTime,2f));
+        accelSpeed = maxSpeed / accelerationTime;
+        decelSpeed = maxSpeed / decelerationTime;
+
+        jumpVel = 2 * apexHeight / apexTime;
+        gravity = -2 * apexHeight / (Mathf.Pow(apexTime, 2f));
     }
 
     // Update is called once per frame
     void Update()
     {
-        //fall
-        velocity.y = gravity * Time.deltaTime + jumpVel;
-        
+
         Vector2 playerInput = new()
         {
             x = Input.GetAxisRaw("Horizontal"),
@@ -41,17 +52,18 @@ public class PlayerController : MonoBehaviour
         };
 
         MovementUpdate(playerInput);
-        JumpInput(playerInput);
+
+        transform.position += velocity * Time.deltaTime;
     }
 
     private void MovementUpdate(Vector2 playerInput)
     {
-       
 
         JumpInput(playerInput);
 
         //horizontal movement
-        transform.position += playerInput.x * velocity * Time.deltaTime;
+        velocity.x += playerInput.x * accelSpeed * Time.deltaTime;
+
     }
 
     private void JumpInput(Vector2 playerInput)
@@ -59,13 +71,12 @@ public class PlayerController : MonoBehaviour
         //initiate Jumping
         if (IsGrounded() && playerInput.y == 1)
         {
-            float position = 0.5f * gravity * Mathf.Pow(Time.deltaTime,2f) + Jumpvelocity * Time.deltaTime;
-            velocity.y -= position;
+            velocity.y = jumpVel;
         }
         //in air
         else if (!IsGrounded())
         {
-            velocity.y = gravity * Time.deltaTime + jumpVel;
+            velocity.y += gravity * Time.deltaTime;
         }
         else
         {
@@ -76,6 +87,8 @@ public class PlayerController : MonoBehaviour
     //walking
     public bool IsWalking()
     {
+
+
         if (Input.GetAxisRaw("Horizontal") != 0)
         {
             return true;
@@ -93,7 +106,9 @@ public class PlayerController : MonoBehaviour
 
         if (Physics2D.OverlapBox(origin, new Vector2(1f, 0.2f), 0, groundlayer))
         { return true; }
-        else { return false; 
+        else
+        {
+            return false;
         }
     }
 
@@ -102,19 +117,19 @@ public class PlayerController : MonoBehaviour
     public FacingDirection GetFacingDirection()
     {
         if (Input.GetAxisRaw("Horizontal") > 0)
-        {  
-                return FacingDirection.right;
+        {
+            return FacingDirection.right;
         }
         if (Input.GetAxisRaw("Horizontal") < 0)
         {
             return FacingDirection.left;
         }
-        else 
+        else
         {
-            return FacingDirection.right;
+            return FacingDirection.left;
         }
 
 
-       
+
     }
 }
