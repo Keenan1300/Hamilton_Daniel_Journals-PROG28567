@@ -1637,7 +1637,7 @@ Rigidbody2D:
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 8
   m_ExcludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -1744,11 +1744,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 86a1ce42ea3e3dd44868493ae73ec06d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gravity: 0
-  jumpVel: 0
+  apexHeight: 50
+  apexTime: 10
+  jumpVel: 6
   groundlayer:
     serializedVersion: 2
     m_Bits: 8
+  currentdirection: 0
 --- !u!4 &1433354315
 Transform:
   m_ObjectHideFlags: 0
@@ -1879,7 +1881,7 @@ GameObject:
   - component: {fileID: 2077868378}
   - component: {fileID: 2077868380}
   - component: {fileID: 2077868379}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: SkyTilemap
   m_TagString: Untagged
   m_Icon: {fileID: 0}

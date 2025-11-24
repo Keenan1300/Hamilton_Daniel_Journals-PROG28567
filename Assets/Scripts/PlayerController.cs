@@ -1,10 +1,16 @@
+using JetBrains.Annotations;
 using Unity.Android.Gradle.Manifest;
 using UnityEngine;
+using UnityEngine.Rendering;
+using UnityEngine.UIElements;
 
 public class PlayerController : MonoBehaviour
 {
-    private Vector3 velocity;
-    public float gravity;
+    private Vector3 velocity = new Vector3(2,2,0);
+    private float gravity;
+    private float Jumpvelocity;
+    public float apexHeight = 5;
+    public float apexTime = 3;
     public float jumpVel;
     public LayerMask groundlayer;
 
@@ -12,19 +18,22 @@ public class PlayerController : MonoBehaviour
     {
         left, right
     }
+    public FacingDirection currentdirection;
 
     // Start is called before the first frame update
     void Start()
     {
         
+        float Jumpvelocity = 2 * apexHeight / apexTime;
+        float gravity = -2 * apexHeight / (Mathf.Pow(apexTime,2f));
     }
 
     // Update is called once per frame
     void Update()
     {
-        // The input from the player needs to be determined and
-        // then passed in the to the MovementUpdate which should
-        // manage the actual movement of the character.
+        //fall
+        velocity.y = gravity * Time.deltaTime + jumpVel;
+        
         Vector2 playerInput = new()
         {
             x = Input.GetAxisRaw("Horizontal"),
@@ -32,39 +41,80 @@ public class PlayerController : MonoBehaviour
         };
 
         MovementUpdate(playerInput);
+        JumpInput(playerInput);
     }
 
     private void MovementUpdate(Vector2 playerInput)
     {
+       
+
         JumpInput(playerInput);
+
+        //horizontal movement
         transform.position += playerInput.x * velocity * Time.deltaTime;
     }
 
     private void JumpInput(Vector2 playerInput)
     {
+        //initiate Jumping
         if (IsGrounded() && playerInput.y == 1)
-            velocity.y = jumpVel;
+        {
+            float position = 0.5f * gravity * Mathf.Pow(Time.deltaTime,2f) + Jumpvelocity * Time.deltaTime;
+            velocity.y -= position;
+        }
+        //in air
         else if (!IsGrounded())
-            velocity.y += gravity * Time.deltaTime;
+        {
+            velocity.y = gravity * Time.deltaTime + jumpVel;
+        }
         else
+        {
             velocity.y = 0;
-
+        }
     }
 
+    //walking
     public bool IsWalking()
     {
-        
-        return false;
+        if (Input.GetAxisRaw("Horizontal") != 0)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
+
+    //grounded
     public bool IsGrounded()
     {
         Vector3 origin = transform.position + Vector3.down * 0.55f;
 
-        return Physics2D.OverlapBox(origin,new Vector2 (1f,0.2f), 0, groundlayer);
+        if (Physics2D.OverlapBox(origin, new Vector2(1f, 0.2f), 0, groundlayer))
+        { return true; }
+        else { return false; 
+        }
     }
 
+
+    //turning
     public FacingDirection GetFacingDirection()
     {
-        return FacingDirection.left;
+        if (Input.GetAxisRaw("Horizontal") > 0)
+        {  
+                return FacingDirection.right;
+        }
+        if (Input.GetAxisRaw("Horizontal") < 0)
+        {
+            return FacingDirection.left;
+        }
+        else 
+        {
+            return FacingDirection.right;
+        }
+
+
+       
     }
 }
