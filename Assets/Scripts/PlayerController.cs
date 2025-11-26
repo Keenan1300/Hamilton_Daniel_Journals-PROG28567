@@ -8,19 +8,23 @@ public class PlayerController : MonoBehaviour
 {
     private Vector3 velocity = new Vector3(2, 2, 0);
 
-    public float maxSpeed = 12;
+    public float maxSpeed = 5;
     public float accelerationTime = 2;
     public float decelerationTime = 2;
     
     [Header("Jump properties")]
     public float apexHeight = 5;
     public float apexTime = 3;
+    public float termvelo = 4;
+    public float CoyoteTime = 3;
+    private float liveCoyoteTime;
 
     private float accelSpeed;
     private float decelSpeed;
 
     private float jumpVel;
     private float gravity;
+
     
     public LayerMask groundlayer;
 
@@ -34,8 +38,9 @@ public class PlayerController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        accelSpeed = maxSpeed / accelerationTime;
-        decelSpeed = maxSpeed / decelerationTime;
+        liveCoyoteTime = CoyoteTime;
+        accelSpeed = maxSpeed / accelerationTime /3f;
+        decelSpeed = maxSpeed / decelerationTime /3f;
 
         jumpVel = 2 * apexHeight / apexTime;
         gravity = -2 * apexHeight / (Mathf.Pow(apexTime, 2f));
@@ -44,6 +49,8 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        //debug 
+        print(liveCoyoteTime);
 
         Vector2 playerInput = new()
         {
@@ -62,7 +69,16 @@ public class PlayerController : MonoBehaviour
         JumpInput(playerInput);
 
         //horizontal movement
+
+        if(velocity.x < maxSpeed ||  velocity.x > maxSpeed * -1)
         velocity.x += playerInput.x * accelSpeed * Time.deltaTime;
+
+        //deceleration
+        if (Input.GetAxisRaw("Horizontal") == 0 && velocity.x != 0)
+        {
+            velocity.x /= decelSpeed;
+        }
+
 
     }
 
@@ -73,13 +89,28 @@ public class PlayerController : MonoBehaviour
         {
             velocity.y = jumpVel;
         }
-        //in air
+
+        //Terminal velocity
         else if (!IsGrounded())
         {
-            velocity.y += gravity * Time.deltaTime;
+            
+            liveCoyoteTime -= 7 * Time.deltaTime;
+
+            //Activate coyote jump
+            if (liveCoyoteTime > 0 && playerInput.y == 1)
+            {
+                velocity.y = jumpVel;
+                liveCoyoteTime = 0;
+            }
+
+            //term velocity
+            if (velocity.y > termvelo * -1)
+            { velocity.y += gravity * Time.deltaTime; }
+            
         }
         else
         {
+            liveCoyoteTime = CoyoteTime;
             velocity.y = 0;
         }
     }
@@ -87,7 +118,6 @@ public class PlayerController : MonoBehaviour
     //walking
     public bool IsWalking()
     {
-
 
         if (Input.GetAxisRaw("Horizontal") != 0)
         {
