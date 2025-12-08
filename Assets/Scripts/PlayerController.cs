@@ -9,7 +9,7 @@ public class PlayerController : MonoBehaviour
     public float maxSpeed = 10;
     public float accelerationTime = 2;
     public float decelerationTime = 2;
-    
+
     [Header("Jump properties")]
     public float apexHeight = 5;
     public float apexTime = 3;
@@ -56,7 +56,8 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         //roll cool down
-        rollingcoold -= 0.5f;
+        if (rollingcoold > 0) rollingcoold -= 0.5f;
+        print(rollingcoold);
 
         //Check constantly if character is running into a wall
         if (Input.GetAxisRaw("Horizontal") != 0)
@@ -65,13 +66,13 @@ public class PlayerController : MonoBehaviour
         }
 
         //Detection Boundary
-            Vector3 Check = transform.position + new Vector3(movement, 0,0);
-        
+        Vector3 Check = transform.position + new Vector3(movement, 0, 0);
+
 
         //Horizontal Mechanic
-        if (Input.GetKeyUp(KeyCode.R))
+        if (Input.GetKeyUp(KeyCode.R) && !isrolling)
         {
-            if (!isrolling)
+            if (rollingcoold < 1)
             {
                 rollInput(Check);
             }
@@ -98,8 +99,8 @@ public class PlayerController : MonoBehaviour
 
         //horizontal movement
 
-        if(velocity.x < maxSpeed ||  velocity.x > maxSpeed * -1)
-        velocity.x += playerInput.x * accelSpeed * Time.deltaTime;
+        if (velocity.x < maxSpeed || velocity.x > maxSpeed * -1)
+            velocity.x += playerInput.x * accelSpeed * Time.deltaTime;
 
         //deceleration
         if (Input.GetAxisRaw("Horizontal") == 0 && velocity.x != 0)
@@ -114,30 +115,29 @@ public class PlayerController : MonoBehaviour
     //Horizontal Mechanic - Roll
     private void rollInput(Vector3 Check)
     {
-        isrolling = true;
-        if (rollingcoold < 1)
+        if (IsGrounded())
         {
-            if (IsGrounded())
-            {
 
-                for (int i = 2; i > 1; i--)
+            for (int i = 2; i > 1; i--)
+            {
+                if (!infrontofwall(Check))
                 {
-                    if (!infrontofwall(Check))
-                    {
-                       
-                        print("activated");
-                        velocity *= 3f;
-                    }
-                    else
-                    {
-                        velocity = Vector3.zero;
-                    }
+                    isrolling = true;
+                    Rolling();
+                    print("activated");
+                    velocity *= 3f;
+                    
                 }
-                rollingcoold = 20;
-                isrolling = false;
+                else
+                {
+                    velocity = Vector3.zero;
+                }
             }
+            rollingcoold = 200f;
+            isrolling = false;
         }
-        
+
+
     }
 
     //Vertical Mechanic - Wall Jump
@@ -158,7 +158,7 @@ public class PlayerController : MonoBehaviour
         //Terminal velocity
         else if (!IsGrounded())
         {
-            
+
             liveCoyoteTime -= 7 * Time.deltaTime;
 
             //Activate coyote jump
@@ -171,7 +171,7 @@ public class PlayerController : MonoBehaviour
             //term velocity
             if (velocity.y > termvelo * -1)
             { velocity.y += gravity * Time.deltaTime; }
-            
+
         }
         else
         {
@@ -209,7 +209,7 @@ public class PlayerController : MonoBehaviour
 
     public bool infrontofwall(Vector3 Check)
     {
-            
+
         if (Physics2D.OverlapBox(Check, new Vector2(1f, 0.2f), 0, groundlayer))
         {
             print("wall touching");
@@ -219,6 +219,12 @@ public class PlayerController : MonoBehaviour
         {
             return false;
         }
+    }
+
+
+    public bool Rolling()
+    {
+        return true;
     }
 
 
@@ -243,4 +249,6 @@ public class PlayerController : MonoBehaviour
 
 
     }
+
+ 
 }
