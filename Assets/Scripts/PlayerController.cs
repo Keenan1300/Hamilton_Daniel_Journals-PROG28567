@@ -58,6 +58,7 @@ public class PlayerController : MonoBehaviour
         //roll cool down
         if (rollingcoold > 0) rollingcoold -= 0.5f;
         print(rollingcoold);
+     
 
         //Check constantly if character is running into a wall
         if (Input.GetAxisRaw("Horizontal") != 0)
@@ -88,14 +89,22 @@ public class PlayerController : MonoBehaviour
 
 
 
+        //Call Physics function
+        if (Input.GetKey(KeyCode.B) && !IsWalking())
+            {
+            BounciiMode();
+            }
+       
+
 
         transform.position += velocity * Time.deltaTime;
     }
 
     private void MovementUpdate(Vector2 playerInput)
     {
+        Vector3 Check = transform.position + new Vector3(movement, 0, 0);
 
-        JumpInput(playerInput);
+        JumpInput(playerInput, Check);
 
         //horizontal movement
 
@@ -112,6 +121,15 @@ public class PlayerController : MonoBehaviour
     }
 
 
+    //Phyics Mechanic - Ball Bounce
+    private void BounciiMode()
+    {
+
+
+    }
+
+
+
     //Horizontal Mechanic - Roll
     private void rollInput(Vector3 Check)
     {
@@ -123,10 +141,9 @@ public class PlayerController : MonoBehaviour
                 if (!infrontofwall(Check))
                 {
                     isrolling = true;
-                    Rolling();
                     print("activated");
                     velocity *= 3f;
-                    
+                    Rolling();
                 }
                 else
                 {
@@ -140,44 +157,47 @@ public class PlayerController : MonoBehaviour
 
     }
 
-    //Vertical Mechanic - Wall Jump
 
 
 
-    //Physics Mechanic - Ball Bounce
 
-
-    private void JumpInput(Vector2 playerInput)
+    private void JumpInput(Vector2 playerInput, Vector3 Check)
     {
         //initiate Jumping
         if (IsGrounded() && playerInput.y == 1)
         {
             velocity.y = jumpVel;
         }
+        //Vertical Mechanic - Wall Jump
+        else if (infrontofwall(Check) && playerInput.y == 1)
+        {
+            velocity.y = jumpVel * 1.2f;
+        }
 
         //Terminal velocity
         else if (!IsGrounded())
-        {
-
-            liveCoyoteTime -= 7 * Time.deltaTime;
-
-            //Activate coyote jump
-            if (liveCoyoteTime > 0 && playerInput.y == 1)
             {
-                velocity.y = jumpVel;
-                liveCoyoteTime = 0;
+
+                liveCoyoteTime -= 7 * Time.deltaTime;
+
+                //Activate coyote jump
+                if (liveCoyoteTime > 0 && playerInput.y == 1)
+                {
+                    velocity.y = jumpVel;
+                    liveCoyoteTime = 0;
+                }
+
+                //term velocity
+                if (velocity.y > termvelo * -1)
+                { velocity.y += gravity * Time.deltaTime; }
+
             }
-
-            //term velocity
-            if (velocity.y > termvelo * -1)
-            { velocity.y += gravity * Time.deltaTime; }
-
-        }
-        else
-        {
-            liveCoyoteTime = CoyoteTime;
-            velocity.y = 0;
-        }
+            else
+            {
+                liveCoyoteTime = CoyoteTime;
+                velocity.y = 0;
+            }
+        
     }
 
     //walking
@@ -224,7 +244,10 @@ public class PlayerController : MonoBehaviour
 
     public bool Rolling()
     {
-        return true;
+        if (isrolling)
+            return true;
+        else { return false; }
+
     }
 
 
