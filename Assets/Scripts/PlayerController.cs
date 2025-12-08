@@ -1,5 +1,3 @@
-using JetBrains.Annotations;
-using Unity.Android.Gradle.Manifest;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.UIElements;
@@ -8,7 +6,7 @@ public class PlayerController : MonoBehaviour
 {
     private Vector3 velocity = new Vector3(2, 2, 0);
 
-    public float maxSpeed = 5;
+    public float maxSpeed = 10;
     public float accelerationTime = 2;
     public float decelerationTime = 2;
     
@@ -22,25 +20,33 @@ public class PlayerController : MonoBehaviour
     private float accelSpeed;
     private float decelSpeed;
 
+
+    //Movement mechanic
+    public float movement;
+    private float rollingcoold = 30;
+    private bool isrolling;
+
     private float jumpVel;
     private float gravity;
 
-    
+
+
     public LayerMask groundlayer;
 
 
     public enum FacingDirection
     {
-        left, right
+        left, right, current
     }
     public FacingDirection currentdirection;
 
     // Start is called before the first frame update
     void Start()
     {
+        isrolling = false;
         liveCoyoteTime = CoyoteTime;
-        accelSpeed = maxSpeed / accelerationTime /3f;
-        decelSpeed = maxSpeed / decelerationTime /3f;
+        accelSpeed = maxSpeed / accelerationTime;
+        decelSpeed = maxSpeed / decelerationTime;
 
         jumpVel = 2 * apexHeight / apexTime;
         gravity = -2 * apexHeight / (Mathf.Pow(apexTime, 2f));
@@ -49,8 +55,27 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //debug 
-        print(liveCoyoteTime);
+        //roll cool down
+        rollingcoold -= 0.5f;
+
+        //Check constantly if character is running into a wall
+        if (Input.GetAxisRaw("Horizontal") != 0)
+        {
+            movement = Input.GetAxisRaw("Horizontal");
+        }
+
+        //Detection Boundary
+            Vector3 Check = transform.position + new Vector3(movement, 0,0);
+        
+
+        //Horizontal Mechanic
+        if (Input.GetKeyUp(KeyCode.R))
+        {
+            if (!isrolling)
+            {
+                rollInput(Check);
+            }
+        }
 
         Vector2 playerInput = new()
         {
@@ -59,6 +84,9 @@ public class PlayerController : MonoBehaviour
         };
 
         MovementUpdate(playerInput);
+
+
+
 
         transform.position += velocity * Time.deltaTime;
     }
@@ -81,6 +109,43 @@ public class PlayerController : MonoBehaviour
 
 
     }
+
+
+    //Horizontal Mechanic - Roll
+    private void rollInput(Vector3 Check)
+    {
+        isrolling = true;
+        if (rollingcoold < 1)
+        {
+            if (IsGrounded())
+            {
+
+                for (int i = 2; i > 1; i--)
+                {
+                    if (!infrontofwall(Check))
+                    {
+                       
+                        print("activated");
+                        velocity *= 3f;
+                    }
+                    else
+                    {
+                        velocity = Vector3.zero;
+                    }
+                }
+                rollingcoold = 20;
+                isrolling = false;
+            }
+        }
+        
+    }
+
+    //Vertical Mechanic - Wall Jump
+
+
+
+    //Physics Mechanic - Ball Bounce
+
 
     private void JumpInput(Vector2 playerInput)
     {
@@ -142,23 +207,39 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    public bool infrontofwall(Vector3 Check)
+    {
+            
+        if (Physics2D.OverlapBox(Check, new Vector2(1f, 0.2f), 0, groundlayer))
+        {
+            print("wall touching");
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
 
     //turning
     public FacingDirection GetFacingDirection()
     {
         if (Input.GetAxisRaw("Horizontal") > 0)
         {
+           
             return FacingDirection.right;
         }
         if (Input.GetAxisRaw("Horizontal") < 0)
         {
+            
             return FacingDirection.left;
         }
         else
         {
-            return FacingDirection.left;
+            return FacingDirection.current;
         }
-
+        
 
 
     }
